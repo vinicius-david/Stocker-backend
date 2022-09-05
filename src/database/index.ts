@@ -9,6 +9,7 @@ const dataSource = new DataSource({
   migrations: [
     process.env.MODE === 'dev' ? 'src/database/migrations/*{.ts,.js}' : 'build/database/migrations/*{.ts,.js}',
   ],
+  migrationsRun: true,
 });
 
 dataSource.initialize()
