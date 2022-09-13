@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 
+import UsersRepository from '../repositories/UsersRepository';
+
 import ListUsersService from '../services/ListUsersService';
 import FindUserService from '../services/FindUserService';
 import CreateUserService from '../services/CreateUserService';
@@ -8,7 +10,8 @@ import UpdateUserService from '../services/UpdateUserService';
 
 export default class UsersController {
   public async list(req: Request, res: Response): Promise<Response> {
-    const listUsers = new ListUsersService();
+    const usersRepository = new UsersRepository();
+    const listUsers = new ListUsersService(usersRepository);
 
     const users = await listUsers.execute();
 
@@ -18,7 +21,8 @@ export default class UsersController {
   public async show(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
 
-    const findUser = new FindUserService();
+    const usersRepository = new UsersRepository();
+    const findUser = new FindUserService(usersRepository);
 
     const user = await findUser.execute({ id });
 
@@ -31,7 +35,8 @@ export default class UsersController {
   public async create(req: Request, res: Response): Promise<Response> {
     const { name, email, password } = req.body;
 
-    const createUser = new CreateUserService();
+    const usersRepository = new UsersRepository();
+    const createUser = new CreateUserService(usersRepository);
 
     const user = await createUser.execute({ name, email, password });
 
@@ -44,7 +49,8 @@ export default class UsersController {
   public async favorite(req: Request, res: Response): Promise<Response> {
     const { userId, stockId } = req.body;
 
-    const addOrRemoveStock = new AddOrRemoveStockService();
+    const usersRepository = new UsersRepository();
+    const addOrRemoveStock = new AddOrRemoveStockService(usersRepository);
 
     const user = await addOrRemoveStock.execute({ userId, stockId });
 
@@ -60,7 +66,8 @@ export default class UsersController {
       name, email, password, newPassword,
     } = req.body;
 
-    const updateUser = new UpdateUserService();
+    const usersRepository = new UsersRepository();
+    const updateUser = new UpdateUserService(usersRepository);
 
     const user = await updateUser.execute({
       id, name, email, password, newPassword,

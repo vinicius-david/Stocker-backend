@@ -1,5 +1,5 @@
 import User from '../models/User';
-import UsersRepository from '../repositories/UsersRepository';
+import IUsersRepository from '../repositories/IUsersRepository';
 
 import AppError from '../errors/AppError';
 
@@ -9,10 +9,14 @@ interface Request {
 }
 
 class AddOrRemoveStockService {
-  public async execute({ userId, stockId }: Request): Promise<User> {
-    const usersRepository = UsersRepository;
+  usersRepository: IUsersRepository;
 
-    const user = await usersRepository.findOne({ where: { id: userId } });
+  constructor(usersRepository: IUsersRepository) {
+    this.usersRepository = usersRepository;
+  }
+
+  public async execute({ userId, stockId }: Request): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
 
     if (!user) {
       throw new AppError('User not found.');
@@ -30,7 +34,7 @@ class AddOrRemoveStockService {
       user.stocks.push(stockId);
     }
 
-    await usersRepository.save(user);
+    await this.usersRepository.save(user);
 
     return user;
   }

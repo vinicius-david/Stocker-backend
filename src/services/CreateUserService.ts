@@ -1,9 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { hash } from 'bcryptjs';
 
 import User from '../models/User';
-import UsersRepository from '../repositories/UsersRepository';
-
 import AppError from '../errors/AppError';
+import IUsersRepository from '../repositories/IUsersRepository';
 
 interface Request {
   name: string;
@@ -12,10 +12,14 @@ interface Request {
 }
 
 class CreateUserService {
-  public async execute({ name, email, password }: Request): Promise<User> {
-    const usersRepository = UsersRepository;
+  usersRepository: IUsersRepository;
 
-    const findExistingUser = await usersRepository.findByNameOrEmail({ name, email });
+  constructor(usersRepository: IUsersRepository) {
+    this.usersRepository = usersRepository;
+  }
+
+  public async execute({ name, email, password }: Request): Promise<User> {
+    const findExistingUser = await this.usersRepository.findByNameOrEmail({ name, email });
 
     if (findExistingUser) {
       throw new AppError('Name or email already used.');
@@ -23,11 +27,11 @@ class CreateUserService {
 
     const hashedPassword = await hash(password, 8);
 
-    const user = usersRepository.create({
+    const user = await this.usersRepository.create({
       name, email, password: hashedPassword, stocks: [],
     });
 
-    await usersRepository.save(user);
+    await this.usersRepository.save(user);
 
     return user;
   }

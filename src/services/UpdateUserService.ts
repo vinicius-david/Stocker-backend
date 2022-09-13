@@ -1,7 +1,7 @@
 import { compare, hash } from 'bcryptjs';
 
 import User from '../models/User';
-import UsersRepository from '../repositories/UsersRepository';
+import IUsersRepository from '../repositories/IUsersRepository';
 
 import AppError from '../errors/AppError';
 
@@ -14,12 +14,16 @@ interface Request {
 }
 
 class UpdateUserService {
+  usersRepository: IUsersRepository;
+
+  constructor(usersRepository: IUsersRepository) {
+    this.usersRepository = usersRepository;
+  }
+
   public async execute({
     id, name, email, password, newPassword,
   }: Request): Promise<User> {
-    const usersRepository = UsersRepository;
-
-    const user = await usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOne({ where: { id } });
 
     if (!user) {
       throw new AppError('User not found.');
@@ -34,7 +38,7 @@ class UpdateUserService {
     user.name = name || user.name;
 
     if (email && email !== user.email) {
-      const findExistingUser = await usersRepository.findByNameOrEmail({ email });
+      const findExistingUser = await this.usersRepository.findByNameOrEmail({ email });
 
       if (findExistingUser) {
         throw new AppError('Name or email already used.');
@@ -49,7 +53,7 @@ class UpdateUserService {
       user.password = hashedNewPassword;
     }
 
-    await usersRepository.save(user);
+    await this.usersRepository.save(user);
 
     return user;
   }

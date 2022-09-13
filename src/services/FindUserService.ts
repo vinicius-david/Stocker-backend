@@ -1,5 +1,5 @@
 import User from '../models/User';
-import UsersRepository from '../repositories/UsersRepository';
+import IUsersRepository from '../repositories/IUsersRepository';
 
 import AppError from '../errors/AppError';
 
@@ -8,10 +8,14 @@ interface Request {
 }
 
 class FindUserService {
-  public async execute({ id }: Request): Promise<User> {
-    const usersRepository = UsersRepository;
+  usersRepository: IUsersRepository;
 
-    const user = await usersRepository.findOne({ where: { id } });
+  constructor(usersRepository: IUsersRepository) {
+    this.usersRepository = usersRepository;
+  }
+
+  public async execute({ id }: Request): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id } });
 
     if (!user) {
       throw new AppError('User not found.');

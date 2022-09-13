@@ -1,13 +1,17 @@
 import User from '../models/User';
-import UsersRepository from '../repositories/UsersRepository';
+import IUsersRepository from '../repositories/IUsersRepository';
 
 import AppError from '../errors/AppError';
 
 class ListUsersService {
-  public async execute(): Promise<User[]> {
-    const usersRepository = UsersRepository;
+  usersRepository: IUsersRepository;
 
-    const users = await usersRepository.find();
+  constructor(usersRepository: IUsersRepository) {
+    this.usersRepository = usersRepository;
+  }
+
+  public async execute(): Promise<User[]> {
+    const users = await this.usersRepository.find();
 
     if (!users) {
       throw new AppError('Users not found.');
