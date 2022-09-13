@@ -13,7 +13,7 @@ import AppError from '../errors/AppError';
 const routes: Router = Router();
 
 routes.get('/', (req, res) => {
-  res.send('Welcome to Stocker API!');
+  res.send('Welcome to Stocker API!!');
 });
 routes.use('/users', usersRouter);
 routes.use('/sessions', sessionsRouter);
