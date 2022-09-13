@@ -38,11 +38,11 @@ jobs:
       - name: Install dependecies
         run: yarn
 
-      - name: Deploy application
-        if: ${{ github.ref == 'refs/heads/master' }}
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "stocker-backend-1"
-          heroku_email: "vinicius.davidf@gmail.com"
-          buildpack: "https://github.com/zidizei/heroku-buildpack-tsc#v2.0"
+      # - name: Deploy application
+      #   if: ${{ github.ref == 'refs/heads/master' }}
+      #   uses: akhileshns/heroku-deploy@v3.12.12
+      #   with:
+      #     heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+      #     heroku_app_name: "stocker-backend-1"
+      #     heroku_email: "vinicius.davidf@gmail.com"
+      #     buildpack: "https://github.com/zidizei/heroku-buildpack-tsc#v2.0"

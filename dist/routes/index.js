@@ -9,6 +9,9 @@ var users_routes_1 = __importDefault(require("./users.routes"));
 var sessions_routes_1 = __importDefault(require("./sessions.routes"));
 var AppError_1 = __importDefault(require("../errors/AppError"));
 var routes = express_1.Router();
+routes.get('/', function (req, res) {
+    res.send('Welcome to Stocker API!!');
+});
 routes.use('/users', users_routes_1.default);
 routes.use('/sessions', sessions_routes_1.default);
 routes.use(function (err, req, res, _) {
