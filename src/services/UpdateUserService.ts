@@ -35,7 +35,15 @@ class UpdateUserService {
       throw new AppError('Incorrect password.');
     }
 
-    user.name = name || user.name;
+    if (name && name !== user.name) {
+      const findExistingUser = await this.usersRepository.findByNameOrEmail({ name });
+
+      if (findExistingUser) {
+        throw new AppError('Name or email already used.');
+      }
+
+      user.name = name;
+    }
 
     if (email && email !== user.email) {
       const findExistingUser = await this.usersRepository.findByNameOrEmail({ email });

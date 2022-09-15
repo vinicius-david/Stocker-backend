@@ -9,7 +9,8 @@ interface createDTO {
 }
 
 interface where {
-  id: string;
+  id?: string;
+  email?: string;
 }
 
 interface findOneDTO {
@@ -41,7 +42,7 @@ class UsersRepository implements IUsersRepository {
   }
 
   async findOne(data: findOneDTO): Promise<User | null> {
-    return this.users.find(u => u.id === data.where.id) || null;
+    return this.users.find(u => u.id === data.where.id || u.email === data.where.email) || null;
   }
 
   async findByNameOrEmail({ name, email }: findByNameOrEmailDTO): Promise<User | null> {
