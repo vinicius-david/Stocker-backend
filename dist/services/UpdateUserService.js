@@ -40,20 +40,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var bcryptjs_1 = require("bcryptjs");
-var UsersRepository_1 = __importDefault(require("../repositories/UsersRepository"));
 var AppError_1 = __importDefault(require("../errors/AppError"));
 var UpdateUserService = /** @class */ (function () {
-    function UpdateUserService() {
+    function UpdateUserService(usersRepository) {
+        this.usersRepository = usersRepository;
     }
     UpdateUserService.prototype.execute = function (_a) {
         var id = _a.id, name = _a.name, email = _a.email, password = _a.password, newPassword = _a.newPassword;
         return __awaiter(this, void 0, void 0, function () {
-            var usersRepository, user, passwordMatched, findExistingUser, hashedNewPassword;
+            var user, passwordMatched, findExistingUser, findExistingUser, hashedNewPassword;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0:
-                        usersRepository = UsersRepository_1.default;
-                        return [4 /*yield*/, usersRepository.findOne({ where: { id: id } })];
+                    case 0: return [4 /*yield*/, this.usersRepository.findOne({ where: { id: id } })];
                     case 1:
                         user = _b.sent();
                         if (!user) {
@@ -65,25 +63,34 @@ var UpdateUserService = /** @class */ (function () {
                         if (!passwordMatched) {
                             throw new AppError_1.default('Incorrect password.');
                         }
-                        user.name = name || user.name;
-                        if (!(email && email !== user.email)) return [3 /*break*/, 4];
-                        return [4 /*yield*/, usersRepository.findByNameOrEmail({ email: email })];
+                        if (!(name && name !== user.name)) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.usersRepository.findByNameOrEmail({ name: name })];
                     case 3:
                         findExistingUser = _b.sent();
                         if (findExistingUser) {
                             throw new AppError_1.default('Name or email already used.');
                         }
-                        user.email = email;
+                        user.name = name;
                         _b.label = 4;
                     case 4:
-                        if (!newPassword) return [3 /*break*/, 6];
-                        return [4 /*yield*/, bcryptjs_1.hash(newPassword, 8)];
+                        if (!(email && email !== user.email)) return [3 /*break*/, 6];
+                        return [4 /*yield*/, this.usersRepository.findByNameOrEmail({ email: email })];
                     case 5:
+                        findExistingUser = _b.sent();
+                        if (findExistingUser) {
+                            throw new AppError_1.default('Name or email already used.');
+                        }
+                        user.email = email;
+                        _b.label = 6;
+                    case 6:
+                        if (!newPassword) return [3 /*break*/, 8];
+                        return [4 /*yield*/, bcryptjs_1.hash(newPassword, 8)];
+                    case 7:
                         hashedNewPassword = _b.sent();
                         user.password = hashedNewPassword;
-                        _b.label = 6;
-                    case 6: return [4 /*yield*/, usersRepository.save(user)];
-                    case 7:
+                        _b.label = 8;
+                    case 8: return [4 /*yield*/, this.usersRepository.save(user)];
+                    case 9:
                         _b.sent();
                         return [2 /*return*/, user];
                 }

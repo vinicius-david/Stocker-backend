@@ -39,20 +39,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var UsersRepository_1 = __importDefault(require("../repositories/UsersRepository"));
 var AppError_1 = __importDefault(require("../errors/AppError"));
 var AddOrRemoveStockService = /** @class */ (function () {
-    function AddOrRemoveStockService() {
+    function AddOrRemoveStockService(usersRepository) {
+        this.usersRepository = usersRepository;
     }
     AddOrRemoveStockService.prototype.execute = function (_a) {
         var userId = _a.userId, stockId = _a.stockId;
         return __awaiter(this, void 0, void 0, function () {
-            var usersRepository, user, stockIndex;
+            var user, stockIndex;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0:
-                        usersRepository = UsersRepository_1.default;
-                        return [4 /*yield*/, usersRepository.findOne({ where: { id: userId } })];
+                    case 0: return [4 /*yield*/, this.usersRepository.findOne({ where: { id: userId } })];
                     case 1:
                         user = _b.sent();
                         if (!user) {
@@ -67,7 +65,7 @@ var AddOrRemoveStockService = /** @class */ (function () {
                         else {
                             user.stocks.push(stockId);
                         }
-                        return [4 /*yield*/, usersRepository.save(user)];
+                        return [4 /*yield*/, this.usersRepository.save(user)];
                     case 2:
                         _b.sent();
                         return [2 /*return*/, user];

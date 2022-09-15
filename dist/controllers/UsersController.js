@@ -50,6 +50,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var UsersRepository_1 = __importDefault(require("../repositories/UsersRepository"));
 var ListUsersService_1 = __importDefault(require("../services/ListUsersService"));
 var FindUserService_1 = __importDefault(require("../services/FindUserService"));
 var CreateUserService_1 = __importDefault(require("../services/CreateUserService"));
@@ -60,11 +61,12 @@ var UsersController = /** @class */ (function () {
     }
     UsersController.prototype.list = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var listUsers, users;
+            var usersRepository, listUsers, users;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        listUsers = new ListUsersService_1.default();
+                        usersRepository = new UsersRepository_1.default();
+                        listUsers = new ListUsersService_1.default(usersRepository);
                         return [4 /*yield*/, listUsers.execute()];
                     case 1:
                         users = _a.sent();
@@ -75,12 +77,13 @@ var UsersController = /** @class */ (function () {
     };
     UsersController.prototype.show = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, findUser, user;
+            var id, usersRepository, findUser, user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         id = req.params.id;
-                        findUser = new FindUserService_1.default();
+                        usersRepository = new UsersRepository_1.default();
+                        findUser = new FindUserService_1.default(usersRepository);
                         return [4 /*yield*/, findUser.execute({ id: id })];
                     case 1:
                         user = _a.sent();
@@ -91,12 +94,13 @@ var UsersController = /** @class */ (function () {
     };
     UsersController.prototype.create = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, name, email, password, createUser, user;
+            var _a, name, email, password, usersRepository, createUser, user;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _a = req.body, name = _a.name, email = _a.email, password = _a.password;
-                        createUser = new CreateUserService_1.default();
+                        usersRepository = new UsersRepository_1.default();
+                        createUser = new CreateUserService_1.default(usersRepository);
                         return [4 /*yield*/, createUser.execute({ name: name, email: email, password: password })];
                     case 1:
                         user = _b.sent();
@@ -107,12 +111,13 @@ var UsersController = /** @class */ (function () {
     };
     UsersController.prototype.favorite = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, userId, stockId, addOrRemoveStock, user;
+            var _a, userId, stockId, usersRepository, addOrRemoveStock, user;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _a = req.body, userId = _a.userId, stockId = _a.stockId;
-                        addOrRemoveStock = new AddOrRemoveStockService_1.default();
+                        usersRepository = new UsersRepository_1.default();
+                        addOrRemoveStock = new AddOrRemoveStockService_1.default(usersRepository);
                         return [4 /*yield*/, addOrRemoveStock.execute({ userId: userId, stockId: stockId })];
                     case 1:
                         user = _b.sent();
@@ -123,13 +128,14 @@ var UsersController = /** @class */ (function () {
     };
     UsersController.prototype.update = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, _a, name, email, password, newPassword, updateUser, user;
+            var id, _a, name, email, password, newPassword, usersRepository, updateUser, user;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         id = req.params.id;
                         _a = req.body, name = _a.name, email = _a.email, password = _a.password, newPassword = _a.newPassword;
-                        updateUser = new UpdateUserService_1.default();
+                        usersRepository = new UsersRepository_1.default();
+                        updateUser = new UpdateUserService_1.default(usersRepository);
                         return [4 /*yield*/, updateUser.execute({
                                 id: id, name: name, email: email, password: password, newPassword: newPassword,
                             })];

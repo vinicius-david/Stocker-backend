@@ -41,14 +41,57 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var database_1 = __importDefault(require("../database"));
 var User_1 = __importDefault(require("../models/User"));
-var UsersRepository = database_1.default.getRepository(User_1.default).extend({
-    findByNameOrEmail: function (_a) {
+var UsersRepository = /** @class */ (function () {
+    function UsersRepository() {
+        this.ormRepository = database_1.default.getRepository(User_1.default);
+    }
+    UsersRepository.prototype.create = function (_a) {
+        var name = _a.name, email = _a.email, password = _a.password;
+        return __awaiter(this, void 0, void 0, function () {
+            var user;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        user = this.ormRepository.create({
+                            name: name, email: email, password: password,
+                            stocks: [],
+                        });
+                        return [4 /*yield*/, this.ormRepository.save(user)];
+                    case 1:
+                        _b.sent();
+                        return [2 /*return*/, user];
+                }
+            });
+        });
+    };
+    UsersRepository.prototype.find = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.ormRepository.find()];
+            });
+        });
+    };
+    UsersRepository.prototype.findOne = function (data) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.ormRepository.findOne(data)];
+            });
+        });
+    };
+    UsersRepository.prototype.save = function (user) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.ormRepository.save(user)];
+            });
+        });
+    };
+    UsersRepository.prototype.findByNameOrEmail = function (_a) {
         var name = _a.name, email = _a.email;
         return __awaiter(this, void 0, void 0, function () {
             var user;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, this.findOne({
+                    case 0: return [4 /*yield*/, this.ormRepository.findOne({
                             where: [{ name: name }, { email: email }],
                         })];
                     case 1:
@@ -57,6 +100,7 @@ var UsersRepository = database_1.default.getRepository(User_1.default).extend({
                 }
             });
         });
-    },
-});
+    };
+    return UsersRepository;
+}());
 exports.default = UsersRepository;

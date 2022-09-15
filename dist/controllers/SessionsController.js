@@ -50,18 +50,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var UsersRepository_1 = __importDefault(require("../repositories/UsersRepository"));
 var AuthUserService_1 = __importDefault(require("../services/AuthUserService"));
 var SessionsController = /** @class */ (function () {
     function SessionsController() {
     }
     SessionsController.prototype.create = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, email, password, authUser, _b, user, token, userWithoutPassword;
+            var _a, email, password, usersRepository, authUser, _b, user, token, userWithoutPassword;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
                         _a = req.body, email = _a.email, password = _a.password;
-                        authUser = new AuthUserService_1.default();
+                        usersRepository = new UsersRepository_1.default();
+                        authUser = new AuthUserService_1.default(usersRepository);
                         return [4 /*yield*/, authUser.execute({
                                 email: email,
                                 password: password,

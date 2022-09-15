@@ -41,22 +41,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var bcryptjs_1 = require("bcryptjs");
 var jsonwebtoken_1 = require("jsonwebtoken");
-var database_1 = __importDefault(require("../database"));
 var auth_1 = __importDefault(require("../config/auth"));
-var User_1 = __importDefault(require("../models/User"));
 var AppError_1 = __importDefault(require("../errors/AppError"));
 var AuthUserService = /** @class */ (function () {
-    function AuthUserService() {
+    function AuthUserService(usersRepository) {
+        this.usersRepository = usersRepository;
     }
     AuthUserService.prototype.execute = function (_a) {
         var email = _a.email, password = _a.password;
         return __awaiter(this, void 0, void 0, function () {
-            var usersRepository, user, passwordMatched, secret, expiresIn, token;
+            var user, passwordMatched, secret, expiresIn, token;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0:
-                        usersRepository = database_1.default.getRepository(User_1.default);
-                        return [4 /*yield*/, usersRepository.findOne({ where: { email: email } })];
+                    case 0: return [4 /*yield*/, this.usersRepository.findOne({ where: { email: email } })];
                     case 1:
                         user = _b.sent();
                         if (!user) {

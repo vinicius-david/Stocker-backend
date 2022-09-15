@@ -39,20 +39,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var UsersRepository_1 = __importDefault(require("../repositories/UsersRepository"));
 var AppError_1 = __importDefault(require("../errors/AppError"));
 var FindUserService = /** @class */ (function () {
-    function FindUserService() {
+    function FindUserService(usersRepository) {
+        this.usersRepository = usersRepository;
     }
     FindUserService.prototype.execute = function (_a) {
         var id = _a.id;
         return __awaiter(this, void 0, void 0, function () {
-            var usersRepository, user;
+            var user;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0:
-                        usersRepository = UsersRepository_1.default;
-                        return [4 /*yield*/, usersRepository.findOne({ where: { id: id } })];
+                    case 0: return [4 /*yield*/, this.usersRepository.findOne({ where: { id: id } })];
                     case 1:
                         user = _b.sent();
                         if (!user) {

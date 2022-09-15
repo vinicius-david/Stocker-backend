@@ -39,42 +39,58 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-/* eslint-disable no-unused-vars */
-var bcryptjs_1 = require("bcryptjs");
-var AppError_1 = __importDefault(require("../errors/AppError"));
-var CreateUserService = /** @class */ (function () {
-    function CreateUserService(usersRepository) {
-        this.usersRepository = usersRepository;
+var uuidv4_1 = require("uuidv4");
+var User_1 = __importDefault(require("../../models/User"));
+var UsersRepository = /** @class */ (function () {
+    function UsersRepository() {
+        this.users = [];
     }
-    CreateUserService.prototype.execute = function (_a) {
+    UsersRepository.prototype.create = function (_a) {
         var name = _a.name, email = _a.email, password = _a.password;
         return __awaiter(this, void 0, void 0, function () {
-            var findExistingUser, hashedPassword, user;
+            var user;
             return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0: return [4 /*yield*/, this.usersRepository.findByNameOrEmail({ name: name, email: email })];
-                    case 1:
-                        findExistingUser = _b.sent();
-                        if (findExistingUser) {
-                            throw new AppError_1.default('Name or email already used.');
-                        }
-                        return [4 /*yield*/, bcryptjs_1.hash(password, 8)];
-                    case 2:
-                        hashedPassword = _b.sent();
-                        return [4 /*yield*/, this.usersRepository.create({
-                                name: name, email: email,
-                                password: hashedPassword, stocks: [],
-                            })];
-                    case 3:
-                        user = _b.sent();
-                        return [4 /*yield*/, this.usersRepository.save(user)];
-                    case 4:
-                        _b.sent();
-                        return [2 /*return*/, user];
-                }
+                user = new User_1.default();
+                Object.assign(user, {
+                    id: uuidv4_1.uuid(),
+                    name: name, email: email, password: password,
+                });
+                this.users.push(user);
+                return [2 /*return*/, user];
             });
         });
     };
-    return CreateUserService;
+    UsersRepository.prototype.find = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.users];
+            });
+        });
+    };
+    UsersRepository.prototype.findOne = function (data) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.users.find(function (u) { return u.id === data.where.id || u.email === data.where.email; }) || null];
+            });
+        });
+    };
+    UsersRepository.prototype.findByNameOrEmail = function (_a) {
+        var name = _a.name, email = _a.email;
+        return __awaiter(this, void 0, void 0, function () {
+            var user;
+            return __generator(this, function (_b) {
+                user = this.users.find(function (u) { return u.name === name || u.email === email; });
+                return [2 /*return*/, user || null];
+            });
+        });
+    };
+    UsersRepository.prototype.save = function (user) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, user];
+            });
+        });
+    };
+    return UsersRepository;
 }());
-exports.default = CreateUserService;
+exports.default = UsersRepository;

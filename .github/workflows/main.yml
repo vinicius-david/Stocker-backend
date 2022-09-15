@@ -38,6 +38,9 @@ jobs:
       - name: Install dependecies
         run: yarn
 
+      - name: Run tests
+        run: yarn test
+
       # - name: Deploy application
       #   if: ${{ github.ref == 'refs/heads/master' }}
       #   uses: akhileshns/heroku-deploy@v3.12.12
